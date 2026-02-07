@@ -1,5 +1,7 @@
 # DevBridge MCP
 
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 > Make Claude Code / Codex your local AI IDE, while real code runs on remote servers.
 
 DevBridge MCP is an MCP server that bridges **local AI coding clients** (Claude Code / Codex) with **remote Linux servers** through SSH.
