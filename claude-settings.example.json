@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "remote-executor": {
+      "command": "node",
+      "args": ["/Users/keamy/Desktop/cc-remote/remote-executor-mcp/dist/index.js"]
+    }
+  }
+}

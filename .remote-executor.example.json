@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "singapore": {
+      "host": "your-server.com",
+      "user": "your-username",
+      "port": 22,
+      "identity_file": "~/.ssh/id_rsa",
+      "remote_path": "/home/your-username/projects"
+    },
+    "dev": {
+      "host": "dev.example.com",
+      "user": "developer",
+      "port": 22
+    }
+  },
+  "default_server": "singapore"
+}
