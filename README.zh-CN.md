@@ -2,11 +2,24 @@
 
 [简体中文](./README.md) | [English](./README.en.md)
 
+<p align="center">
+  <img src="./docs/assets/devbridge-icon.svg" alt="DevBridge MCP 科研工具 开发工具 开发MCP 论文MCP" width="120" />
+</p>
+
+![Research Tool](https://img.shields.io/badge/Research-Tool-2E8B57)
+![Development Tool](https://img.shields.io/badge/Development-Tool-1F6FEB)
+![MCP Workflow](https://img.shields.io/badge/MCP-Workflow-8A2BE2)
+![Paper Loop](https://img.shields.io/badge/Paper-Iteration-E67E22)
+
 > 让 Claude Code / Codex 在本地编程，而在远程服务器执行与调试。
 
 DevBridge MCP 是一个面向 AI 工程与科研场景的 MCP 服务端，通过 SSH 稳定连接**本地 AI 编程客户端**（Claude Code / Codex）与**远程 Linux 服务器**。它把“本地智能编码体验”和“远程高算力执行环境”打通成一条低摩擦开发链路。
 
 对于需要频繁实验、调参、训练和复现实验结果的团队，DevBridge MCP 可作为一款**科研高效工具**：本地改代码、自动同步、远程执行、实时回传日志与结果。在复杂网络环境下，它也常被当作实用的**科研神器**，帮助你在不改变现有服务器网络策略的前提下持续高效迭代。
+
+你可以把 DevBridge MCP 理解为 AI 研发工作流里的“本地-远程桥接层”：本地保留 Claude Code / Codex 的高效率开发体验，远程承接 GPU 训练、数据处理、论文实验复现等重负载任务，同时把日志、状态、结果持续回流到本地调试闭环。
+
+**关键词 / Search Tags**: 科研工具, 科研高效工具, 科研神器, 开发工具, 开发MCP, 论文MCP, 论文复现, AI科研工作流, MCP开发工具, remote development, MCP server, Claude Code, Codex
 
 ## 1. 项目解决什么问题
 

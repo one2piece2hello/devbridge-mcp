@@ -2,9 +2,24 @@
 
 [简体中文](./README.md) | [English](./README.en.md)
 
+<p align="center">
+  <img src="./docs/assets/devbridge-icon.svg" alt="DevBridge MCP Research Tool and Development MCP Icon" width="120" />
+</p>
+
+![Research Tool](https://img.shields.io/badge/Research-Tool-2E8B57)
+![Development Tool](https://img.shields.io/badge/Development-Tool-1F6FEB)
+![MCP Workflow](https://img.shields.io/badge/MCP-Workflow-8A2BE2)
+![Paper Loop](https://img.shields.io/badge/Paper-Iteration-E67E22)
+
 > Make Claude Code / Codex your local AI IDE, while real code runs on remote servers.
 
 DevBridge MCP is an MCP server that bridges **local AI coding clients** (Claude Code / Codex) with **remote Linux servers** through SSH.
+
+For teams running frequent experiments, hyperparameter tuning, model training, and paper reproduction loops, DevBridge MCP acts as a practical research productivity layer: edit locally, sync automatically, execute remotely, and stream results back for fast debugging rounds.
+
+You can think of DevBridge MCP as the local-to-remote bridge for AI engineering workflows, especially useful when remote servers are firewall-restricted and cannot directly run Claude Code or Codex.
+
+**Search Tags**: research tool, development tool, MCP development tool, paper MCP, paper reproduction, AI research workflow, remote development, Claude Code, Codex, SSH workflow, 科研工具, 开发工具, 开发MCP, 论文MCP
 
 ## 1. Why This Project Exists
 
