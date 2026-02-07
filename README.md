@@ -1,56 +1,44 @@
 # DevBridge MCP
 
-[English](./README.md) | [简体中文](./README.zh-CN.md)
+[简体中文](./README.md) | [English](./README.en.md)
 
-> Make Claude Code / Codex your local AI IDE, while real code runs on remote servers.
+> 让 Claude Code / Codex 在本地编程，而在远程服务器执行与调试。
 
-DevBridge MCP is an MCP server that bridges **local AI coding clients** (Claude Code / Codex) with **remote Linux servers** through SSH.
+DevBridge MCP 是一个 MCP 服务端，用于通过 SSH 连接**本地 AI 编程客户端**（Claude Code / Codex）与**远程 Linux 服务器**。
 
-## 1. Why This Project Exists
+## 1. 项目解决什么问题
 
-### Core pain points it solves
+在 AI/ML 开发里，常见现实是：
 
-When you develop AI/ML systems, this is very common:
+- 本地 macOS 开发体验最好（AI 编程工具可用）
+- 算力在远程 GPU 服务器（A100/H100，长任务）
+- 部分服务器在防火墙或内网环境，无法直接连国际互联网
+- 这些服务器上很难直接使用 Claude Code / Codex
 
-- You edit code on a local macOS laptop (good AI tools, good UX).
-- Your GPU servers are remote (A100/H100, long-running jobs).
-- Some remote servers are behind firewall / no international internet access.
-- On those servers, you cannot directly use Claude Code / Codex.
+DevBridge MCP 的定位是一个本地网关：
 
-DevBridge MCP solves this by using a **local MCP gateway**:
+1. Claude Code / Codex 在本机运行
+2. DevBridge MCP 在本机运行并管理 SSH
+3. 命令在远程服务器执行
+4. 输出、日志、结果回流到本地 AI 上下文
 
-1. Claude Code / Codex runs on your local machine.
-2. DevBridge MCP runs locally and manages SSH.
-3. Commands execute on the remote server.
-4. Output/logs/files return to local AI context.
+这样你可以保留：
 
-So you still get:
+- 本地 AI 辅助编程体验
+- 远程执行与调试能力
+- 长任务日志追踪
+- 固定化迭代流程（改代码 -> 同步 -> 执行 -> 观察 -> 下一轮）
 
-- Local AI-assisted coding
-- Remote execution and debugging
-- Long-job log tracking
-- Repeatable workflow (sync -> run -> inspect -> iterate)
+## 2. 快速开始
 
-### Typical workflow
+### 2.1 环境要求
 
-```text
-Local macOS (Claude/Codex edits code)
-  -> auto/manual sync to remote
-  -> remote run (short or long/nohup)
-  -> stream/pull logs and results
-  -> iterate quickly
-```
-
-## 2. Full Setup Tutorial
-
-### 2.1 Prerequisites
-
-- macOS / Linux local machine
+- 本地 macOS / Linux
 - Node.js 18+
-- SSH access to remote server
+- 可用的 SSH 访问
 - `git`
 
-Install and build:
+安装并构建：
 
 ```bash
 cd remote-executor-mcp
@@ -58,44 +46,29 @@ npm install
 npm run build
 ```
 
----
+### 2.2 配置 SSH 免密登录
 
-### 2.2 Step 1: Enable SSH key login (recommended, detailed)
+推荐使用密钥登录。
 
-This project is designed for key-based SSH.
-
-#### A) Generate SSH keypair on local machine
+1. 生成密钥（如果你还没有）：
 
 ```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"
 ```
 
-Press Enter to use default path (`~/.ssh/id_ed25519`).
-
-#### B) Get your public key
+2. 查看公钥：
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Copy the whole line (starts with `ssh-ed25519 ...`).
-
-#### C) Put public key on remote server
-
-Option 1 (recommended, if `ssh-copy-id` is available):
+3. 写入服务器：
 
 ```bash
-ssh-copy-id user@your-server-ip
-```
-
-Option 2 (manual):
-
-```bash
-# On local: append your public key into remote authorized_keys
 cat ~/.ssh/id_ed25519.pub | ssh user@your-server-ip 'mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys'
 ```
 
-#### D) Configure SSH alias (`~/.ssh/config`)
+4. 在 `~/.ssh/config` 配置别名：
 
 ```sshconfig
 Host Los_dc03
@@ -105,19 +78,17 @@ Host Los_dc03
   IdentityFile ~/.ssh/id_ed25519
 ```
 
-#### E) Verify no-password login
+5. 验证：
 
 ```bash
 ssh Los_dc03
 ```
 
-If login works without password prompt, SSH is ready.
+如果无需输入密码即可登录，说明配置完成。
 
----
+### 2.3 配置 Claude Code
 
-### 2.3 Step 2: Configure Claude Code
-
-Edit `~/.claude/settings.json`:
+在 `~/.claude/settings.json` 添加：
 
 ```json
 {
@@ -130,11 +101,7 @@ Edit `~/.claude/settings.json`:
 }
 ```
 
-Optional: in project `.claude/settings.local.json`, allow tool usage (including `dev_session_*`).
-
-Restart Claude Code after config change.
-
-#### Claude verification prompts
+重启 Claude Code 后，验证示例：
 
 ```text
 请调用 list_servers
@@ -144,84 +111,43 @@ Restart Claude Code after config change.
 测试连接 Los_dc03
 ```
 
-```text
-在 Los_dc03 上执行：hostname && uname -a
-```
-
----
-
-### 2.4 Step 3: Configure Codex
-
-Add MCP server globally:
+### 2.4 配置 Codex
 
 ```bash
 codex mcp add remote-executor -- node /Users/keamy/Desktop/cc-remote/remote-executor-mcp/dist/index.js
 ```
 
-Verify:
+验证：
 
 ```bash
 codex mcp list
 codex mcp get remote-executor
 ```
 
-If you updated server code and want to refresh mount:
+## 3. 工具清单（当前版本）
 
-```bash
-codex mcp remove remote-executor
-codex mcp add remote-executor -- node /Users/keamy/Desktop/cc-remote/remote-executor-mcp/dist/index.js
-```
-
-#### Codex verification prompt
-
-```text
-先 list_servers，再 test_connection 到 Los_dc03，并返回摘要
-```
-
----
-
-### 2.5 Step 4: Verify end-to-end workflow
-
-#### Short task loop
-
-```text
-把本地 ./test_cal 同步到 Los_dc03:/root/test_cal，然后运行 python3 /root/test_cal/calculate.py
-```
-
-#### Long task loop (nohup)
-
-```text
-在 Los_dc03 启动长任务（后台）：
-cd /root/myproj && nohup python3 train.py > train.log 2>&1 &
-然后持续查看日志
-```
-
-Or use fixed session tools (`dev_session_*`) below.
-
-## 3. Tool Catalog (Latest)
-
-| Category | Tool | Description |
+| 分类 | 工具 | 说明 |
 |---|---|---|
-| Basic Execution | `remote_execute` | Short synchronous command execution (<5 min) |
-| Background Jobs | `remote_run_background` | Start long job via `nohup`, return PID + log path |
-| Background Jobs | `remote_tail_log` | Read / follow log output |
-| Background Jobs | `remote_check_process` | Check process by PID/name |
-| Background Jobs | `remote_kill_process` | Stop process by signal |
-| File Sync | `remote_sync` | Local -> Remote sync (`auto/rsync/scp`) |
-| File Sync | `remote_pull` | Remote -> Local file/dir pull |
-| Git | `remote_git_push` | Local add/commit/push to remote |
-| Git | `remote_git_clone` | Clone remote repo to local |
-| Git | `remote_git_pull_local` | Pull latest code to local repo |
-| Git | `remote_git_init` | Initialize remote bare repo + deploy hook |
-| Dev Session | `dev_session_start` | Start file-watch + auto sync + run workflow |
-| Dev Session | `dev_session_status` | Inspect session state/log/result |
-| Dev Session | `dev_session_stop` | Stop session (optional remote process kill) |
-| Utility | `list_servers` | List configured SSH hosts/servers |
-| Utility | `test_connection` | Verify SSH connectivity |
+| 基础执行 | `remote_execute` | 短任务同步执行（<5 分钟） |
+| 后台任务 | `remote_run_background` | 使用 `nohup` 启动长任务，返回 PID 与日志路径 |
+| 后台任务 | `remote_tail_log` | 拉取/跟踪日志输出 |
+| 后台任务 | `remote_check_process` | 检查进程状态 |
+| 后台任务 | `remote_kill_process` | 终止进程 |
+| 文件同步 | `remote_sync` | 本地 -> 远程同步（`auto/rsync/scp`） |
+| 文件同步 | `remote_pull` | 远程 -> 本地拉取 |
+| Git | `remote_git_push` | 本地提交并推送 |
+| Git | `remote_git_clone` | 从服务器克隆到本地 |
+| Git | `remote_git_pull_local` | 拉取最新到本地 |
+| Git | `remote_git_init` | 在服务器初始化仓库 |
+| 开发会话 | `dev_session_start` | 启动监听 + 自动同步 + 执行 |
+| 开发会话 | `dev_session_status` | 查看会话状态 |
+| 开发会话 | `dev_session_stop` | 停止会话 |
+| 工具 | `list_servers` | 列出服务器配置 |
+| 工具 | `test_connection` | 测试 SSH 连通性 |
 
-## 4. Fixed Workflow Examples
+## 4. 固定化工作流示例
 
-### 4.1 Short iterative development
+### 4.1 短任务循环
 
 ```text
 启动 short 会话：
@@ -236,7 +162,7 @@ Or use fixed session tools (`dev_session_*`) below.
 - debounce_ms: 500
 ```
 
-### 4.2 Long training session
+### 4.2 长任务循环（训练）
 
 ```text
 启动 long 会话：
@@ -252,46 +178,29 @@ Or use fixed session tools (`dev_session_*`) below.
 - follow_seconds: 1
 ```
 
-## 5. Security Notes
+## 5. 开源与贡献
 
-- Recommended auth mode: **SSH key login**.
-- Password-only SSH is not recommended for this MCP workflow.
-- Do not commit secrets (API keys, private keys, production configs).
-- Prefer least-privilege server accounts if possible.
+本项目已开源，欢迎社区贡献。
 
-## 6. Open Source Collaboration
+- 贡献指南：[`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- 行为准则：[`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
+- 提交 Issue：[`Issues`](../../issues)
+- 提交 PR：[`Pull Requests`](../../pulls)
 
-This project is open source and built for real-world remote AI dev workflows.
+如果你有特殊网络环境、企业防火墙限制、或跨平台需求，欢迎直接提 Issue。
 
-You are very welcome to:
+## 6. 发布文案模板
 
-- Open an **Issue** with your specific scenario/constraints.
-- Propose feature improvements (sync strategy, session strategy, observability, etc.).
-- Submit a **Pull Request** with bug fixes and enhancements.
+仓库内置了中英文发布模板（GitHub Release + 首发推广帖）：
 
-Especially welcome:
+- [`docs/LAUNCH_KIT_ZH_EN.md`](./docs/LAUNCH_KIT_ZH_EN.md)
 
-- Enterprise/firewall-specific workflows
-- Better cross-platform compatibility
-- Better CI/testing coverage
-- Better UX prompts and docs
+## 7. 许可协议
 
-Please keep contributions practical and reproducible.
+MIT License，见 [`LICENSE`](./LICENSE)。
 
-### Contribution entry points
+---
 
-- Read contribution guide: [`CONTRIBUTING.md`](./CONTRIBUTING.md)
-- Read code of conduct: [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
-- Create issue: [`Issues`](../../issues)
-- Submit PR: [`Pull Requests`](../../pulls)
+补充：若你希望完整新手版中文教程，可查看：
 
-## 7. Release And Promotion Kit
-
-- Bilingual GitHub Release template + first launch posts:
-  [`docs/LAUNCH_KIT_ZH_EN.md`](./docs/LAUNCH_KIT_ZH_EN.md)
-
-## 8. License
-
-MIT License. See [`LICENSE`](./LICENSE).
-
-This repository is intentionally open for community contributions through issues and pull requests.
+- [`TUTORIAL_CN.md`](./TUTORIAL_CN.md)

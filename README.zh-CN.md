@@ -1,6 +1,6 @@
 # DevBridge MCP
 
-[English](./README.md) | [简体中文](./README.zh-CN.md)
+[简体中文](./README.md) | [English](./README.en.md)
 
 > 让 Claude Code / Codex 在本地编程，而在远程服务器执行与调试。
 
