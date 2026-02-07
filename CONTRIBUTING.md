@@ -2,19 +2,22 @@
 
 Thanks for contributing.
 
-## How to contribute
+## Ground rules
 
-1. Fork this repo and create a feature branch.
-2. Make focused, testable changes.
-3. Run local build/tests.
-4. Open a PR with:
-   - what problem it solves
-   - reproduction steps
-   - before/after behavior
+- By participating, you agree to follow [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
+- Keep changes focused and practical.
+- Prefer backward-compatible tool behavior.
 
-## Good issue template
+## Quick contribution flow
 
-Please include:
+1. Fork this repo.
+2. Create a branch from `main`.
+3. Implement focused changes with tests/docs updates if needed.
+4. Run:
+   - `npm run build`
+5. Open a Pull Request using the PR template.
+
+## What to include in issues
 
 - Your environment (macOS/Linux, Node version)
 - MCP client (Claude Code / Codex)
@@ -22,6 +25,11 @@ Please include:
 - Exact prompt/tool call
 - Actual output/error
 - Expected behavior
+
+Use:
+
+- Bug report template: `.github/ISSUE_TEMPLATE/bug_report.md`
+- Feature request template: `.github/ISSUE_TEMPLATE/feature_request.md`
 
 ## Scope we value most
 

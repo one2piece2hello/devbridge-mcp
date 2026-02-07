@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and workflow discussion
+    url: https://github.com/one2piece2hello/devbridge-mcp/issues/new/choose
+    about: Ask questions or share workflow ideas.

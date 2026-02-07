@@ -276,16 +276,20 @@ Especially welcome:
 
 Please keep contributions practical and reproducible.
 
-## 7. Suggested Public Repo Name
+### Contribution entry points
 
-If you want a more viral/distributable name, recommended:
+- Read contribution guide: [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- Read code of conduct: [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
+- Create issue: [`Issues`](../../issues)
+- Submit PR: [`Pull Requests`](../../pulls)
 
-- `devbridge-mcp` (recommended)
-- `codebridge-mcp`
-- `remote-loop-mcp`
+## 7. Release And Promotion Kit
+
+- Bilingual GitHub Release template + first launch posts:
+  [`docs/LAUNCH_KIT_ZH_EN.md`](./docs/LAUNCH_KIT_ZH_EN.md)
 
 ## 8. License
 
-MIT License.
+MIT License. See [`LICENSE`](./LICENSE).
 
-If you fork/modify, please preserve attribution and keep improvements open where possible.
+This repository is intentionally open for community contributions through issues and pull requests.
